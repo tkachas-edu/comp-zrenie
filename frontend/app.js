@@ -16,9 +16,12 @@ let originalFile  = null;   // File object kept for server requests
 let cvReady       = false;  // OpenCV.js loaded flag
 
 // ── OpenCV ready callback (called by onload in <script>) ──────────────────
+// The script onload fires when the JS is downloaded, but WASM init is async.
+// We must wait for onRuntimeInitialized before using cv.Mat etc.
 function onOpenCvReady() {
-  cvReady = true;
-  console.log("OpenCV.js ready");
+  cv["onRuntimeInitialized"] = () => {
+    cvReady = true;
+  };
 }
 
 // ── File handling ─────────────────────────────────────────────────────────
