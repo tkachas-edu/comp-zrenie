@@ -1,9 +1,5 @@
-/* ── Smart Photo Filter – client-side logic ────────────────────────────────
-   Базовые фильтры применяются через OpenCV.js на клиенте.
-   Умные операции отправляются на Flask-сервер (/api/process).
-   ───────────────────────────────────────────────────────────────────────── */
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = "";
 
 // DOM refs
 const fileInput      = document.getElementById("fileInput");

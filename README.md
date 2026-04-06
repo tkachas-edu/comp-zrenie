@@ -36,13 +36,7 @@ python app.py
 
 ### 2. Фронтенд
 
-Откройте `frontend/index.html` в браузере напрямую **или** раздайте через любой статический сервер:
-
-```bash
-cd frontend
-python -m http.server 8080
-# Перейдите на http://localhost:8080
-```
+Фронтенд раздаётся самим Flask-сервером. После запуска `python app.py` откройте http://localhost:5000
 
 ## API
 

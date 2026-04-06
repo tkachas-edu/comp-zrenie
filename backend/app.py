@@ -1,8 +1,17 @@
 import io
+import os
 import cv2
 import numpy as np
-from flask import Flask, request, jsonify, send_file
-app = Flask(__name__)
+from flask import Flask, request, jsonify, send_file, send_from_directory
+
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
+
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
+
+
+@app.route("/")
+def index():
+    return send_from_directory(FRONTEND_DIR, "index.html")
 
 MAX_SIZE = 10 * 1024 * 1024  # 10 MB
 
