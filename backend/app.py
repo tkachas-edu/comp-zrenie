@@ -2,10 +2,7 @@ import io
 import cv2
 import numpy as np
 from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS
-
 app = Flask(__name__)
-CORS(app)
 
 MAX_SIZE = 10 * 1024 * 1024  # 10 MB
 
