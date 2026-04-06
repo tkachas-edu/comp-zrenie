@@ -15,17 +15,19 @@ const resetBtn       = document.getElementById("resetBtn");
 let originalFile  = null;   // File object kept for server requests
 let cvReady       = false;  // OpenCV.js loaded flag
 
-// ── OpenCV ready callback (called by onload in <script>) ──────────────────
-function onOpenCvReady() {
-  // If loaded from cache, WASM may already be initialized
+// ── Wait for OpenCV.js to initialize ─────────────────────────────────────
+// opencv.js loads async — poll until cv exists and WASM is fully compiled.
+(function waitForCv() {
+  if (typeof cv === "undefined") {
+    setTimeout(waitForCv, 100);
+    return;
+  }
   if (cv.Mat) {
     cvReady = true;
   } else {
-    cv["onRuntimeInitialized"] = () => {
-      cvReady = true;
-    };
+    cv["onRuntimeInitialized"] = () => { cvReady = true; };
   }
-}
+})();
 
 // ── File handling ─────────────────────────────────────────────────────────
 fileInput.addEventListener("change", (e) => {
