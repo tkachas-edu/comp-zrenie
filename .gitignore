@@ -20,4 +20,5 @@ Thumbs.db
 
 # Uploads / temp
 backend/uploads/
+backend/_haar_face.xml
 *.tmp

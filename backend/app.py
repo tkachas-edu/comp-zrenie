@@ -60,17 +60,27 @@ def process():
 # Operations
 # ---------------------------------------------------------------------------
 
-def op_detect_faces(img: np.ndarray):
-    """Detect faces with Haar cascades and draw bounding boxes."""
-    import os
+def _get_cascade_path() -> str:
+    """Return an ASCII-only path to the Haar cascade XML.
 
+    On Windows, cv2.data.haarcascades may contain non-ASCII characters
+    (e.g. a Cyrillic username), which OpenCV's FileStorage cannot open.
+    We copy the file once to the backend directory and reuse the copy.
+    """
+    import os, shutil
+    local = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_haar_face.xml")
+    if not os.path.exists(local):
+        src = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        if not os.path.exists(src):
+            raise FileNotFoundError("Haar cascade not found in OpenCV data dir")
+        shutil.copy2(src, local)
+    return local
+
+
+def op_detect_faces(img: np.ndarray):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
 
-    cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-    if not os.path.exists(cascade_path):
-        raise FileNotFoundError("Haar cascade not found")
-
-    face_cascade = cv2.CascadeClassifier(cascade_path)
+    face_cascade = cv2.CascadeClassifier(_get_cascade_path())
     faces = face_cascade.detectMultiScale(
         gray,
         scaleFactor=1.1,
